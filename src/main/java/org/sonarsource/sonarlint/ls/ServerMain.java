@@ -46,7 +46,8 @@ public class ServerMain {
   }
 
   public static void main(String... args) {
-    new ServerMain(System.out, System.err).startLanguageServer(args);
+    // new ServerMain(System.out, System.err).startLanguageServer(args);
+    new ServerMain(System.out, System.err).startLanguageServerWithStdIO(args);
   }
 
   static int getIndexOfNextParam(int start, String[] args) {
@@ -76,6 +77,18 @@ public class ServerMain {
       e.printStackTrace(err);
       exitWithError();
     }
+  }
+
+  public void startLanguageServerWithStdIO(String... args) {
+    if (args.length < 1) {
+      err.println(USAGE);
+      exitWithError();
+    }
+
+    var analyzers = extractAnalyzers(args);
+    var extraAnalyzers = extractExtraAnalyzers(args);
+
+    SonarLintLanguageServer.byStdIO(analyzers, extraAnalyzers);
   }
 
   Collection<Path> extractAnalyzers(String[] args) {

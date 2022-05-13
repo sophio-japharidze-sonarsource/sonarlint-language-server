@@ -186,6 +186,12 @@ public class SonarLintLanguageServer implements SonarLintExtendedLanguageServer,
     new SonarLintLanguageServer(socket.getInputStream(), socket.getOutputStream(), analyzers, extraAnalyzers);
   }
 
+  static void byStdIO(Collection<Path> analyzers, Collection<Path> extraAnalyzers) {
+    InputStream inputStream = System.in;
+    OutputStream outputStream = System.out;
+    new SonarLintLanguageServer(inputStream, outputStream, analyzers, extraAnalyzers);
+  }
+
   @Override
   public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
     return CompletableFutures.computeAsync(cancelToken -> {
